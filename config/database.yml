@@ -1,8 +1,8 @@
 development:
   adapter: mysql
   database: gnucash
-  user: vbatts
-  password: nil
+  username: gnucash
+  password: gnucash
   pool: 5
   timeout: 1000
 
