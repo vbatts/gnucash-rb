@@ -36,12 +36,20 @@ ActiveRecord::Base.configurations = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection('development')
 
 module Gnucash
-  class Accounts < ActiveRecord::Base; end
+  class Accounts < ActiveRecord::Base
+    set_primary_key = 'guid'
+    belongs_to :split, :class_name => 'Splits'
+    belongs_to :account, :class_name => 'Accounts', :foreign_key => 'guid', :primary_key => 'parent_guid'
+    has_one :commodity, :class_name => 'Commodities', :foreign_key => 'guid', :primary_key => 'commodity_guid'
+  end
   class Books < ActiveRecord::Base; end
   class Billterms < ActiveRecord::Base; end
   class BudgetAmounts < ActiveRecord::Base; end
   class Budgets < ActiveRecord::Base; end
-  class Commodities < ActiveRecord::Base; end
+  class Commodities < ActiveRecord::Base
+    set_primary_key = 'guid'
+    belongs_to :account, :class_name => 'Accounts'
+  end
   class Customers < ActiveRecord::Base; end
   class Employees < ActiveRecord::Base; end
   class Entries < ActiveRecord::Base; end
@@ -50,16 +58,24 @@ module Gnucash
   end
   class Invoices < ActiveRecord::Base; end
   class Jobs < ActiveRecord::Base; end
-  class Lots < ActiveRecord::Base; end
+  class Lots < ActiveRecord::Base
+  end
   class Orders < ActiveRecord::Base; end
   class Prices < ActiveRecord::Base; end
   class Recurrences < ActiveRecord::Base; end
   class Schedxactions < ActiveRecord::Base; end
   class Slots < ActiveRecord::Base; end
-  class Splits < ActiveRecord::Base; end
+  class Splits < ActiveRecord::Base
+    set_primary_key = 'guid'
+    has_one :transaction, :class_name => 'Transactions', :foreign_key => 'guid', :primary_key => 'tx_guid'
+    has_many :account, :class_name => 'Accounts', :foreign_key => 'guid', :primary_key => 'account_guid'
+  end
   class TaxableEntries < ActiveRecord::Base; end
   class Taxables < ActiveRecord::Base; end
-  class Transactions < ActiveRecord::Base; end
+  class Transactions < ActiveRecord::Base
+    set_primary_key = "guid"
+    belongs_to :splits
+  end
   class Vendors < ActiveRecord::Base; end
   class Versions < ActiveRecord::Base; end
 end
