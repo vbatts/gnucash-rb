@@ -23,7 +23,6 @@
 This is intended to help me script my account access,
 and provide alternate forms of manipulating the data.
 
-
 http://wiki.gnucash.org/wiki/SQL
 see the Entity Relaional Diagram image there
 =end
