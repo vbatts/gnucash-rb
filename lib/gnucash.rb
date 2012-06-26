@@ -55,16 +55,31 @@ module Gnucash
   class Commodities < ActiveRecord::Base
     set_primary_key = 'guid'
     belongs_to :account, :class_name => 'Accounts'
+    belongs_to :transaction, :class_name => 'Transactions'
   end
-  class Customers < ActiveRecord::Base; end
-  class Employees < ActiveRecord::Base; end
-  class Entries < ActiveRecord::Base; end
+  class Customers < ActiveRecord::Base
+    set_primary_key = 'guid'
+    # This is ugly, but they've named to column what the accessor name should be, instead of _guid
+    has_one :currency_l, :class_name => 'Commodities', :foreign_key => 'guid', :primary_key => 'currency'
+    has_one :terms_l, :class_name => 'Billterms', :foreign_key => 'guid', :primary_key => 'terms'
+    has_one :taxtable_l, :class_name => 'Taxables', :foreign_key => 'guid', :primary_key => 'taxtable'
+  end
+  class Employees < ActiveRecord::Base
+    set_primary_key = 'guid'
+  end
+  class Entries < ActiveRecord::Base
+    set_primary_key = 'guid'
+  end
   class Gnclock < ActiveRecord::Base
     set_table_name 'gnclock'
   end
-  class Invoices < ActiveRecord::Base; end
-  class Jobs < ActiveRecord::Base; end
+  class Invoices < ActiveRecord::Base
+  end
+  class Jobs < ActiveRecord::Base
+  end
   class Lots < ActiveRecord::Base
+    set_primary_key = 'guid'
+    has_one :account, :class_name => 'Accounts', :foreign_key => 'guid', :primary_key => 'account_guid'
   end
   class Orders < ActiveRecord::Base; end
   class Prices < ActiveRecord::Base; end
@@ -81,6 +96,7 @@ module Gnucash
   class Transactions < ActiveRecord::Base
     set_primary_key = "guid"
     belongs_to :splits
+    has_one :currency, :class_name => 'Commodities', :foreign_key => 'guid', :primary_key => 'currency_guid'
   end
   class Vendors < ActiveRecord::Base; end
   class Versions < ActiveRecord::Base; end
